@@ -147,7 +147,30 @@ func (p *Parser) ParseFile() (file *File, err error) {
 	if p.errors.Len() > 0 {
 		return nil, p.errors.Err()
 	}
-
+	var nass [][]s
+	for i := 0; i < len(stmts); i += 1 {
+		nas := srfa(stmts[i].String(), "[A-Za-z][a-zA-Z0-9]*(_[a-zA-Z0-9]+)*[:()]")
+		pq(nas, stmts[i].String())
+		nass = append(nass, nas)
+	}
+	for i := 0; i < len(nass); i += 1 {
+		for j := 1; j < len(nass[i]); j += 1 {
+			i1 := i + 1
+			bdo := false
+			for ; i1 < len(nass); i1 += 1 {
+				if nass[i1][0][:len(nass[i1][0])-1] == nass[i][j][:len(nass[i][j])-1] {
+					nass = amn[[]s](nass[:i], nass[i1], nass[i:i1], nass[i1+1:])
+					stmts = amn[Stmt](stmts[:i], stmts[i1], stmts[i:i1], stmts[i1+1:])
+					bdo = true
+					break
+				}
+			}
+			if bdo {
+				i -= 1
+				break
+			}
+		}
+	}
 	file = &File{
 		InputFile: p.file,
 		Stmts:     stmts,
