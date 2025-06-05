@@ -1,6 +1,9 @@
 package parser
 
-import "regexp"
+import (
+	"reflect"
+	"regexp"
+)
 
 func AppendManyNew[T any](v []T, as ...any) []T {
 	l := len(v)
@@ -11,7 +14,7 @@ func AppendManyNew[T any](v []T, as ...any) []T {
 		case []T:
 			l += len(a.([]T))
 		default:
-			E("type error:", vt(a))
+			panic("type error:" + reflect.TypeOf(a).String())
 		}
 	}
 	n := make([]T, l)
@@ -20,16 +23,16 @@ func AppendManyNew[T any](v []T, as ...any) []T {
 	for _, a := range as {
 		switch a.(type) {
 		case T:
-			v = append(v, a.(T))
+			n = append(n, a.(T))
 		case []T:
-			v = append(v, a.([]T)...)
+			n = append(n, a.([]T)...)
 		default:
-			E("type error:", vt(a))
+			panic("type error:" + reflect.TypeOf(a).String())
 		}
 	}
 	return n
 }
 
-func regexSplit(s0, frx s) []s {
+func regexFindAll(s0, frx s) []s {
 	return regexp.MustCompile(frx).FindAllString(s0, -1)
 }
