@@ -150,7 +150,7 @@ func (p *Parser) ParseFile() (file *File, err error) {
 
 	var nass [][]string
 	for i := 0; i < len(stmts); i += 1 {
-		nas := regexSplit(stmts[i].String(), "[A-Za-z][a-zA-Z0-9]*(_[a-zA-Z0-9]+)*\\s*[:()]")
+		nas := regexFindAll(stmts[i].String(), "[A-Za-z][a-zA-Z0-9]*(_[a-zA-Z0-9]+)*\\s*[:()]")
 		nass = append(nass, nas)
 	}
 	for i := 0; i < len(nass); i += 1 {
